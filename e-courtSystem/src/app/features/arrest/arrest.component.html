@@ -1,0 +1,202 @@
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="d-flex flex-row-reverse mb-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openArrest(arrestContent, true)"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        &nbsp; Add New Arrest Data
+      </button>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Arrest Details List</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>NIC</th>
+                    <th>Place</th>
+                    <th>Reason</th>
+                    <th>Remark</th>
+                    <th>Officer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let arrest of arrestData; let i = index">
+                    <!-- <td>
+                      <div class="round-img">
+                        <a href=""><img width="35" src="../../../assets/images/avatar/1.png" alt="" /></a>
+                      </div>
+                    </td> -->
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ arrest.firstName }} {{ arrest.lastName }}</td>
+                    <td>
+                      <span>{{ arrest.nic }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.place }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.reason }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.remark }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.officer }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.createdDate | date }}</span>
+                    </td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td>
+                      <i
+                        class="fa fa-edit text-warning"
+                        aria-hidden="true"
+                        (click)="editArrest(arrestContent, arrest, false)"
+                      ></i>
+                      <i
+                        class="fa fa-trash text-danger ml-2"
+                        aria-hidden="true"
+                        (click)="clearList()"
+                      ></i>
+                    </td>
+                    <confirmation-modal
+                      #confirmationModal
+                      (newConfirmationEvent)="
+                        getConfirmationValue($event, arrest.id)
+                      "
+                      [modalStyle]="modalStyle"
+                      [modalTitle]="modalTitle"
+                      [modalBody]="modalBody"
+                      [modalButtonColor]="modalButtonColor"
+                    >
+                    </confirmation-modal>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #arrestContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      {{ isNewItem ? "Add New Arrest Data" : "Update Arrest Data" }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputfirstName">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputfirstName"
+            placeholder="First Name"
+            formControlName="firstName"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            id="inputArrestId"
+            formControlName="arrestId"
+            *ngIf="!isNewItem"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputlastName">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputlastName"
+            placeholder="Last Name"
+            formControlName="lastName"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputNIC">NIC Number</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputNIC"
+            placeholder="NIC Number"
+            formControlName="NIC"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPlace">Place</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputPlace"
+            placeholder="Place"
+            formControlName="place"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputReason">Reason</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputReason"
+          placeholder="Reason"
+          formControlName="reason"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputOfficer">Officer Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputOfficer"
+          placeholder="Officer"
+          formControlName="officer"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputRemark">Remark</label>
+        <textarea
+          class="form-control"
+          id="inputRemark"
+          rows="3"
+          formControlName="remark"
+        ></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-primary">
+        {{ isNewItem ? "Add New Arrest Data" : "Update Arrest Data" }}
+      </button>
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,26 @@
+<ng-template #confirmationModal let-c="close" let-d="dismiss">
+  <div class="modal-header {{ modalStyle }}">
+    <h4 class="modal-title" id="modal-title">
+      {{ modalTitle }}
+    </h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>
+      {{ modalBody }}
+    </p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="d('Cross click')">
+      Cancel
+    </button>
+    <button type="button" class="btn {{ modalButtonColor }}" (click)="c('Save click')" *ngIf="modalButtonValue">
+      {{ modalButtonValue }}
+    </button>
+    <button type="button" class="btn {{ modalButtonColor }}" (click)="c('Save click')" *ngIf="!modalButtonValue">
+      Ok
+    </button>
+  </div>
+</ng-template>
