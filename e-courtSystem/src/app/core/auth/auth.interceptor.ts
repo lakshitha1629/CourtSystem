@@ -2,6 +2,7 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/c
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -33,8 +34,4 @@ export class AuthInterceptor implements HttpInterceptor {
     else
       return next.handle(req.clone());
   }
-}
-
-function tap(arg0: (succ: any) => void, arg1: (err: any) => void): import("rxjs").OperatorFunction<HttpEvent<any>, HttpEvent<any>> {
-  throw new Error("Function not implemented.");
 }

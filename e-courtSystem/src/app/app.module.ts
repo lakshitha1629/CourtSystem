@@ -20,12 +20,16 @@ import { UserLoginComponent } from './user-login/user-login.component';
 import { LayoutComponent } from './layout/layout.component';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgBootstrapFormValidationModule } from 'ng-bootstrap-form-validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { UserService } from './core/service/user.service';
+import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { AuthService } from './core/auth/auth.service';
+import { ArrestService } from './core/service/arrest.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +65,11 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     ChartsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  // providers: [{ provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' } }],
+  providers: [AuthService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
