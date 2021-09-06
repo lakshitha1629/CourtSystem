@@ -65,7 +65,7 @@ import { ArrestService } from './core/service/arrest.service';
     ChartsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [AuthService, {
+  providers: [UserService, AuthService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthInterceptor,
     multi: true

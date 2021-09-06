@@ -34,7 +34,7 @@ namespace CourtSystemAPI.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDto user)
         {
-            user.Role = "ADMIN";
+            // user.Role = "ADMIN";
             if (ModelState.IsValid)
             {
                 // We can utilise the model

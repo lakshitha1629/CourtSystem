@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "F:\\Projects\\CourtSystem\\CourtSystemAPI\\TodoApp.csproj": {}
+    "F:\\Projects\\CourtSystem\\CourtSystemAPI\\CourtSystemAPI.csproj": {}
   },
   "projects": {
-    "F:\\Projects\\CourtSystem\\CourtSystemAPI\\TodoApp.csproj": {
+    "F:\\Projects\\CourtSystem\\CourtSystemAPI\\CourtSystemAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\Projects\\CourtSystem\\CourtSystemAPI\\TodoApp.csproj",
-        "projectName": "TodoApp",
-        "projectPath": "F:\\Projects\\CourtSystem\\CourtSystemAPI\\TodoApp.csproj",
+        "projectUniqueName": "F:\\Projects\\CourtSystem\\CourtSystemAPI\\CourtSystemAPI.csproj",
+        "projectName": "CourtSystemAPI",
+        "projectPath": "F:\\Projects\\CourtSystem\\CourtSystemAPI\\CourtSystemAPI.csproj",
         "packagesPath": "C:\\Users\\HP\\.nuget\\packages\\",
         "outputPath": "F:\\Projects\\CourtSystem\\CourtSystemAPI\\obj\\",
         "projectStyle": "PackageReference",

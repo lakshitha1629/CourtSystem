@@ -52,7 +52,7 @@ namespace CourtSystemAPI.Controllers
             return "Web method for Police";
         }
 
-         [HttpGet]
+        [HttpGet]
         [Authorize(Roles = "VIEWER")]
         [Route("ForViewer")]
         public string GetViewer()

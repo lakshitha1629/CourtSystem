@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace TodoApp.Migrations
+namespace CourtSystemAPI.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210906183248_init")]
+    [Migration("20210906205333_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

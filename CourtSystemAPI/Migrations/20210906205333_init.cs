@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace TodoApp.Migrations
+namespace CourtSystemAPI.Migrations
 {
     public partial class init : Migration
     {
