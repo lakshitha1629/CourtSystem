@@ -31,7 +31,7 @@
   },
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "CourtSystemAPI/1.0.0": {
+      "TodoApp/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.Authentication.JwtBearer": "5.0.2",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "5.0.2",
@@ -317,10 +317,10 @@
           "WindowsBase": "4.0.0.0"
         },
         "runtime": {
-          "CourtSystemAPI.dll": {}
+          "TodoApp.dll": {}
         },
         "compile": {
-          "CourtSystemAPI.dll": {}
+          "TodoApp.dll": {}
         }
       },
       "Humanizer.Core/2.8.26": {
@@ -2577,7 +2577,7 @@
     }
   },
   "libraries": {
-    "CourtSystemAPI/1.0.0": {
+    "TodoApp/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

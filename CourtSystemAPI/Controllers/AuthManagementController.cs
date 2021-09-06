@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using CourtSystemAPI.Data;
-using CourtSystemAPI.Models;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using CourtSystemAPI.Configuration;
 using CourtSystemAPI.Models.DTOs.Requests;
-using CourtSystemAPI.Services;
+using CourtSystemAPI.Models.DTOs.Responses;
 
 namespace CourtSystemAPI.Controllers
 {
@@ -14,64 +19,149 @@ namespace CourtSystemAPI.Controllers
     [ApiController]
     public class AuthManagementController : ControllerBase
     {
-        private readonly ApiDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly JwtConfig _jwtConfig;
 
-        public AuthManagementController(ApiDbContext context)
+        public AuthManagementController(
+            UserManager<IdentityUser> userManager,
+            IOptionsMonitor<JwtConfig> optionsMonitor)
         {
-            _context = context;
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(Guid id)
-        {
-            var user = await _context.User.FirstOrDefaultAsync(x => x.Id == id);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(user);
+            _userManager = userManager;
+            _jwtConfig = optionsMonitor.CurrentValue;
         }
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register(CustomerRegistrationDto data)
+        public async Task<IActionResult> Register([FromBody] UserRegistrationDto user)
         {
-            User user = new()
-            {
-                Id = Guid.NewGuid(),
-                Username = data.Username,
-                Email = data.Email,
-                Password = data.Password,
-                Role = "Customer"
-            };
-
+            user.Role = "ADMIN";
             if (ModelState.IsValid)
             {
-                await _context.User.AddAsync(user);
-                await _context.SaveChangesAsync();
+                // We can utilise the model
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
 
-                return CreatedAtAction("GetUser", new { id = user.Id }, user);
+                if (existingUser != null)
+                {
+                    return BadRequest(new RegistrationResponse()
+                    {
+                        Errors = new List<string>() {
+                                "Email already in use"
+                            },
+                        Success = false
+                    });
+                }
+
+                var newUser = new IdentityUser() { Email = user.Email, UserName = user.Username };
+                var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+                await _userManager.AddToRoleAsync(newUser, user.Role);
+                if (isCreated.Succeeded)
+                {
+                    var jwtToken = GenerateJwtToken(newUser);
+
+                    return Ok(new RegistrationResponse()
+                    {
+                        Success = true,
+                        Token = await jwtToken
+                    });
+                }
+                else
+                {
+                    return BadRequest(new RegistrationResponse()
+                    {
+                        Errors = isCreated.Errors.Select(x => x.Description).ToList(),
+                        Success = false
+                    });
+                }
             }
 
-            return new JsonResult("Something went wrong") { StatusCode = 500 };
+            return BadRequest(new RegistrationResponse()
+            {
+                Errors = new List<string>() {
+                        "Invalid payload"
+                    },
+                Success = false
+            });
         }
 
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult<dynamic>> Authenticate([FromBody] UserLoginRequest model)
+        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
         {
-            var user = await _context.User.Where(x => x.Email.ToLower() == model.Email.ToLower() && x.Password == model.Password).FirstOrDefaultAsync();
-
-            if (user == null)
-                return NotFound(new { message = "User or password invalid" });
-
-            var token = TokenService.CreateToken(user);
-            user.Password = "";
-            return new
+            if (ModelState.IsValid)
             {
-                user = user,
-                token = token
+                var existingUser = await _userManager.FindByEmailAsync(user.Email);
+
+                if (existingUser == null)
+                {
+                    return BadRequest(new RegistrationResponse()
+                    {
+                        Errors = new List<string>() {
+                                "Invalid login request"
+                            },
+                        Success = false
+                    });
+                }
+
+                var isCorrect = await _userManager.CheckPasswordAsync(existingUser, user.Password);
+
+                if (!isCorrect)
+                {
+                    return BadRequest(new RegistrationResponse()
+                    {
+                        Errors = new List<string>() {
+                                "Invalid login request"
+                            },
+                        Success = false
+                    });
+                }
+
+                var jwtToken = GenerateJwtToken(existingUser);
+
+                return Ok(new RegistrationResponse()
+                {
+                    Success = true,
+                    Token = await jwtToken
+                });
+            }
+
+            return BadRequest(new RegistrationResponse()
+            {
+                Errors = new List<string>() {
+                        "Invalid payload"
+                    },
+                Success = false
+            });
+        }
+
+        private async Task<String> GenerateJwtToken(IdentityUser data)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+            var key = Encoding.ASCII.GetBytes(_jwtConfig.Secret);
+
+            var user = await _userManager.FindByNameAsync(data.UserName);
+            //Get role assigned to the user
+            var role = await _userManager.GetRolesAsync(user);
+            IdentityOptions _options = new IdentityOptions();
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim("Id", user.Id),
+                    new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault()),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                }),
+                Expires = DateTime.UtcNow.AddHours(6),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
+
+            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+
+            return jwtToken;
         }
     }
 }

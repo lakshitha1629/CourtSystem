@@ -62,10 +62,10 @@ namespace CourtSystemAPI
                 };
             });
 
-            // services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //             .AddEntityFrameworkStores<ApiDbContext>();
-            // services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-            // .AddEntityFrameworkStores<ApiDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<ApiDbContext>();
+
             services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>

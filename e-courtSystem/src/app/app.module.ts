@@ -25,6 +25,7 @@ import { NgBootstrapFormValidationModule } from 'ng-bootstrap-form-validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
 import { ChartsModule } from 'ng2-charts';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ChartsModule } from 'ng2-charts';
     ArrestComponent,
     CaseComponent,
     UserRegistrationComponent,
-    UserLoginComponent
+    UserLoginComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +61,7 @@ import { ChartsModule } from 'ng2-charts';
     ChartsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [{ provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' } }],
+  // providers: [{ provide: NG_ENTITY_SERVICE_CONFIG, useValue: { baseUrl: 'https://jsonplaceholder.typicode.com' } }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
