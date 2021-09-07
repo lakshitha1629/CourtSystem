@@ -6,6 +6,7 @@
         type="button"
         class="btn btn-primary"
         (click)="openArrest(arrestContent, true)"
+        [disabled]="!(userRole === 'POLICE' || userRole === 'ADMIN')"
       >
         <i class="fa fa-plus" aria-hidden="true"></i>
         &nbsp; Add New Arrest Data
@@ -61,18 +62,37 @@
                     <td>
                       <span>{{ arrest.createdDate | date }}</span>
                     </td>
-                    <td><span class="badge badge-success">Active</span></td>
                     <td>
-                      <i
-                        class="fa fa-edit text-warning"
-                        aria-hidden="true"
+                      <span
+                        class="badge badge-success"
+                        (click)="openStatus(statusContent, arrest.id)"
+                        >Active</span
+                      >
+                      <!-- <span class="badge badge-danger">Closed</span> -->
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="button-color"
                         (click)="editArrest(arrestContent, arrest, false)"
-                      ></i>
-                      <i
-                        class="fa fa-trash text-danger ml-2"
-                        aria-hidden="true"
+                        *ngIf="userRole === 'JUDICIAL' || userRole === 'ADMIN'"
+                      >
+                        <i
+                          class="fa fa-edit text-warning"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="button-color"
                         (click)="clearList()"
-                      ></i>
+                        *ngIf="userRole === 'ADMIN'"
+                      >
+                        <i
+                          class="fa fa-trash text-danger ml-2"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
                     </td>
                     <confirmation-modal
                       #confirmationModal
@@ -197,6 +217,34 @@
       <button type="submit" class="btn btn-outline-primary">
         {{ isNewItem ? "Add New Arrest Data" : "Update Arrest Data" }}
       </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #statusContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroupStatus" (validSubmit)="onSubmitStatus()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label><strong>Status</strong></label>
+        <select class="form-control" formControlName="status">
+          <option value="2">Cased</option>
+          <option value="3">Closed</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning">Update Status</button>
     </div>
   </form>
 </ng-template>

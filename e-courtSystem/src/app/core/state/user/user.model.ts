@@ -1,5 +1,8 @@
 export interface User {
-  id: number | string;
+  id: string | number;
+  email: string;
+  role: string;
+  userName: string;
 }
 
 export function createUser(params: Partial<User>) {

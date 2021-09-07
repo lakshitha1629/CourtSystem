@@ -14,7 +14,8 @@ export class UserRegistrationComponent implements OnInit {
   formGroup: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required]),
+    role: new FormControl('', [Validators.required])
   });
 
   constructor(private router: Router, private toastr: ToastrService,
@@ -29,7 +30,7 @@ export class UserRegistrationComponent implements OnInit {
       username: this.formGroup.controls.username.value,
       email: this.formGroup.controls.email.value,
       password: this.formGroup.controls.password.value,
-      role: "ADMIN"
+      role: this.formGroup.controls.role.value
     }
 
     this.userService.register(userData).subscribe({

@@ -30,6 +30,7 @@ import { UserService } from './core/service/user.service';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
 import { ArrestService } from './core/service/arrest.service';
+import { CloseCaseComponent } from './features/close-case/close-case.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { ArrestService } from './core/service/arrest.service';
     CaseComponent,
     UserRegistrationComponent,
     UserLoginComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    CloseCaseComponent
   ],
   imports: [
     BrowserModule,

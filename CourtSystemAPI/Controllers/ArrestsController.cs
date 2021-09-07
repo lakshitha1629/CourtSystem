@@ -55,7 +55,7 @@ namespace CourtSystemAPI.Controllers
                 Reason = data.Reason,
                 Remark = data.Remark,
                 Officer = data.Officer,
-                Status = 1,
+                Status = data.Status,
                 CreatedDate = DateTimeOffset.UtcNow
             };
 

@@ -26,6 +26,10 @@ export class ArrestService {
     return this.http.put<any>(`${environment.apiUrl}api/Arrests`, arrestData);
   }
 
+  updateArrestStatus(arrestData: any) {
+    return this.http.patch<any>(`${environment.apiUrl}api/Arrests`, arrestData);
+  }
+
   deleteArrest(arrestId: any) {
     return this.http.delete(`${environment.apiUrl}api/Arrests/` + arrestId);
   }

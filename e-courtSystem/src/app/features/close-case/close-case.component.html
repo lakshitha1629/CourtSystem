@@ -1,0 +1,92 @@
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Case Details List</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>NIC</th>
+                    <th>Place</th>
+                    <th>Reason</th>
+                    <th>Remark</th>
+                    <th>Officer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let arrest of arrestData; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ arrest.firstName }} {{ arrest.lastName }}</td>
+                    <td>
+                      <span>{{ arrest.nic }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.place }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.reason }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.remark }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.officer }}</span>
+                    </td>
+                    <td>
+                      <span>{{ arrest.createdDate | date }}</span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge badge-danger"
+                        (click)="openStatus(statusContent, arrest.id)"
+                        >Closed</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #statusContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroupStatus" (validSubmit)="onSubmitStatus()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label><strong>Status</strong></label>
+        <select class="form-control" formControlName="status">
+          <option value="1">Arrest</option>
+          <option value="2">Cased</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning">Update Status</button>
+    </div>
+  </form>
+</ng-template>

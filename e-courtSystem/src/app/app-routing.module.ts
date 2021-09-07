@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/auth/auth.guard';
 import { ArrestComponent } from './features/arrest/arrest.component';
 import { CaseComponent } from './features/case/case.component';
+import { CloseCaseComponent } from './features/close-case/close-case.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -29,6 +30,10 @@ const routes: Routes = [
         path: 'caseDetails',
         component: CaseComponent,
       },
+      {
+        path: 'closedDetails',
+        component: CloseCaseComponent,
+      }
     ],
   },
   {

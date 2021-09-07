@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourtSystemAPI.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210906205333_init")]
+    [Migration("20210907191520_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

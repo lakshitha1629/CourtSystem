@@ -2,8 +2,15 @@
   <!-- row -->
   <div class="container-fluid">
     <div class="d-flex flex-row-reverse mb-3">
-      <!-- <button type="button" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> &nbsp; Add New Case
-        Data</button> -->
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="openArrest(arrestContent, true)"
+        [disabled]="!(userRole === 'POLICE' || userRole === 'ADMIN')"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        &nbsp; Add New Case Data
+      </button>
     </div>
     <div class="row">
       <div class="col-12">
@@ -25,10 +32,16 @@
                     <th>Officer</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let arrest of arrestData; let i = index">
+                    <!-- <td>
+                      <div class="round-img">
+                        <a href=""><img width="35" src="../../../assets/images/avatar/1.png" alt="" /></a>
+                      </div>
+                    </td> -->
                     <td>{{ i + 1 }}</td>
                     <td>{{ arrest.firstName }} {{ arrest.lastName }}</td>
                     <td>
@@ -49,7 +62,49 @@
                     <td>
                       <span>{{ arrest.createdDate | date }}</span>
                     </td>
-                    <td><span class="badge badge-success">Active</span></td>
+                    <td>
+                      <span
+                        class="badge badge-success"
+                        (click)="openStatus(statusContent, arrest.id)"
+                        >Active</span
+                      >
+                      <!-- <span class="badge badge-danger">Closed</span> -->
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        class="button-color"
+                        (click)="editArrest(arrestContent, arrest, false)"
+                        *ngIf="userRole === 'JUDICIAL' || userRole === 'ADMIN'"
+                      >
+                        <i
+                          class="fa fa-edit text-warning"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="button-color"
+                        (click)="clearList()"
+                        *ngIf="userRole === 'ADMIN'"
+                      >
+                        <i
+                          class="fa fa-trash text-danger ml-2"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </td>
+                    <confirmation-modal
+                      #confirmationModal
+                      (newConfirmationEvent)="
+                        getConfirmationValue($event, arrest.id)
+                      "
+                      [modalStyle]="modalStyle"
+                      [modalTitle]="modalTitle"
+                      [modalBody]="modalBody"
+                      [modalButtonColor]="modalButtonColor"
+                    >
+                    </confirmation-modal>
                   </tr>
                 </tbody>
               </table>
@@ -60,3 +115,136 @@
     </div>
   </div>
 </div>
+
+<ng-template #arrestContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      {{ isNewItem ? "Add New Case Data" : "Update Case Data" }}
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputfirstName">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputfirstName"
+            placeholder="First Name"
+            formControlName="firstName"
+          />
+          <input
+            type="hidden"
+            class="form-control"
+            id="inputArrestId"
+            formControlName="arrestId"
+            *ngIf="!isNewItem"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputlastName">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputlastName"
+            placeholder="Last Name"
+            formControlName="lastName"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputNIC">NIC Number</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputNIC"
+            placeholder="NIC Number"
+            formControlName="NIC"
+          />
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputPlace">Place</label>
+          <input
+            type="text"
+            class="form-control"
+            id="inputPlace"
+            placeholder="Place"
+            formControlName="place"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="inputReason">Reason</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputReason"
+          placeholder="Reason"
+          formControlName="reason"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputOfficer">Officer Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="inputOfficer"
+          placeholder="Officer"
+          formControlName="officer"
+        />
+      </div>
+      <div class="form-group">
+        <label for="inputRemark">Remark</label>
+        <textarea
+          class="form-control"
+          id="inputRemark"
+          rows="3"
+          formControlName="remark"
+        ></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-primary">
+        {{ isNewItem ? "Add New Case Data" : "Update Case Data" }}
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #statusContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroupStatus" (validSubmit)="onSubmitStatus()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label><strong>Status</strong></label>
+        <select class="form-control" formControlName="status">
+          <option value="1">Arrest</option>
+          <option value="3">Closed</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning">Update Status</button>
+    </div>
+  </form>
+</ng-template>

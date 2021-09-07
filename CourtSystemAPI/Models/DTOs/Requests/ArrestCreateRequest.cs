@@ -11,6 +11,6 @@ namespace CourtSystemAPI.Models.DTOs.Requests
         public string Reason { get; set; }
         public string Remark { get; set; }
         public string Officer { get; set; }
-
+        public int Status { get; set; }
     }
 }
