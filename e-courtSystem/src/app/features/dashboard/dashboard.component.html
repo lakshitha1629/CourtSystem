@@ -139,7 +139,26 @@
                     <td>
                       <span>{{ arrest.place }}</span>
                     </td>
-                    <td><span class="badge badge-success">Active</span></td>
+                    <td>
+                      <span
+                        class="badge badge-success"
+                        *ngIf="arrest.status == 1"
+                      >
+                        Arrest
+                      </span>
+                      <span
+                        class="badge badge-warning"
+                        *ngIf="arrest.status == 2"
+                      >
+                        Case
+                      </span>
+                      <span
+                        class="badge badge-danger"
+                        *ngIf="arrest.status == 3"
+                      >
+                        Closed
+                      </span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
