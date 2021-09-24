@@ -53,6 +53,22 @@ namespace CourtSystemAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "JUDICIAL")]
+        [Route("ForJudicial")]
+        public string GetJudicial()
+        {
+            return "Web method for Judicial";
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "ATTORNEY")]
+        [Route("ForAttorney")]
+        public string GetAttorney()
+        {
+            return "Web method for Attorney";
+        }
+
+        [HttpGet]
         [Authorize(Roles = "VIEWER")]
         [Route("ForViewer")]
         public string GetViewer()

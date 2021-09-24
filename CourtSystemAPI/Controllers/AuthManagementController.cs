@@ -19,7 +19,7 @@ namespace CourtSystemAPI.Controllers
     [ApiController]
     public class AuthManagementController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private UserManager<IdentityUser> _userManager;
         private readonly JwtConfig _jwtConfig;
 
         public AuthManagementController(
@@ -32,7 +32,7 @@ namespace CourtSystemAPI.Controllers
 
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] UserRegistrationDto user)
+        public async Task<Object> Register(UserRegistrationDto user)
         {
             // user.Role = "ADMIN";
             if (ModelState.IsValid)
@@ -51,27 +51,35 @@ namespace CourtSystemAPI.Controllers
                     });
                 }
 
-                var newUser = new IdentityUser() { Email = user.Email, UserName = user.Username };
-                var isCreated = await _userManager.CreateAsync(newUser, user.Password);
-                await _userManager.AddToRoleAsync(newUser, user.Role);
-                if (isCreated.Succeeded)
-                {
-                    var jwtToken = GenerateJwtToken(newUser);
+                try{
+                    var newUser = new IdentityUser() { Email = user.Email, UserName = user.Username };
+                    var isCreated = await _userManager.CreateAsync(newUser, user.Password);
+                    await _userManager.AddToRoleAsync(newUser, user.Role);
+                    if (isCreated.Succeeded)
+                    {
+                        var jwtToken = GenerateJwtToken(newUser);
 
-                    return Ok(new RegistrationResponse()
+                        return Ok(new RegistrationResponse()
+                        {
+                            Success = true,
+                            Token = await jwtToken
+                        });
+                    }
+                    else
                     {
-                        Success = true,
-                        Token = await jwtToken
-                    });
+                        return BadRequest(new RegistrationResponse()
+                        {
+                            Errors = isCreated.Errors.Select(x => x.Description).ToList(),
+                            Success = false
+                        });
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return BadRequest(new RegistrationResponse()
-                    {
-                        Errors = isCreated.Errors.Select(x => x.Description).ToList(),
-                        Success = false
-                    });
+
+                    throw ex;
                 }
+                
             }
 
             return BadRequest(new RegistrationResponse()
@@ -85,7 +93,7 @@ namespace CourtSystemAPI.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginRequest user)
+        public async Task<IActionResult> Login(UserLoginRequest user)
         {
             if (ModelState.IsValid)
             {
@@ -149,7 +157,6 @@ namespace CourtSystemAPI.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim("Id", user.Id),
-                    new Claim(_options.ClaimsIdentity.RoleClaimType,role.FirstOrDefault()),
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())

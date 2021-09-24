@@ -29,7 +29,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { UserService } from './core/service/user.service';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
-import { ArrestService } from './core/service/arrest.service';
 import { CloseCaseComponent } from './features/close-case/close-case.component';
 
 @NgModule({
