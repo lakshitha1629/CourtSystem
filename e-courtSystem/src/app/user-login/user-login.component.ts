@@ -32,15 +32,17 @@ export class UserLoginComponent implements OnInit {
       email: this.formGroup.controls.email.value,
       password: this.formGroup.controls.password.value
     }
-
+    this.spinner.show();
     this.userService.login(userData).subscribe({
       next: (data: any) => {
+        this.spinner.hide();
         console.log(data);
         localStorage.setItem('token', data.token);
         this.router.navigateByUrl('/main');
       },
       error: error => {
-        console.log(error.error.errors[0]);
+        this.spinner.hide();
+        console.log(error);
         this.toastr.error(error.error.errors[0]);
         this.formGroup.reset();
       }
