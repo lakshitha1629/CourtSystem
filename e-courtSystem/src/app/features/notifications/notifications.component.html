@@ -1,0 +1,210 @@
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="d-flex flex-row-reverse mb-3">
+      <button
+        type="button"
+        class="btn btn-warning"
+        (click)="openNotificationMessage(messageContent)"
+        *ngIf="
+          userRole === 'ATTORNEY' ||
+          userRole === 'POLICE' ||
+          userRole === 'ADMIN'
+        "
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        &nbsp; Add New Message
+      </button>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Notification Message List</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Judicial Officer Email</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th *ngIf="userRole === 'ADMIN'"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    *ngFor="let notification of notificationData; let i = index"
+                  >
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ notification.userTo }}</td>
+                    <td>
+                      <span>{{ notification.message }}</span>
+                    </td>
+                    <td>
+                      <span>
+                        {{ notification.createdDate | date: "medium" }}
+                      </span>
+                    </td>
+                    <td
+                      *ngIf="!(userRole === 'ADMIN' || userRole === 'JUDICIAL')"
+                    >
+                      <span
+                        class="badge badge-warning"
+                        *ngIf="notification.status == 1"
+                      >
+                        Pending..
+                      </span>
+                      <span
+                        class="badge badge-success"
+                        *ngIf="notification.status == 2"
+                      >
+                        Available
+                      </span>
+                      <span
+                        class="badge badge-danger"
+                        *ngIf="notification.status == 3"
+                      >
+                        Not Available
+                      </span>
+                    </td>
+                    <td *ngIf="userRole === 'ADMIN' || userRole === 'JUDICIAL'">
+                      <span
+                        class="badge badge-warning"
+                        (click)="openStatus(statusContent, notification.id)"
+                        *ngIf="notification.status == 1"
+                      >
+                        Pending..
+                      </span>
+                      <span
+                        class="badge badge-success"
+                        (click)="openStatus(statusContent, notification.id)"
+                        *ngIf="notification.status == 2"
+                      >
+                        Available
+                      </span>
+                      <span
+                        class="badge badge-danger"
+                        (click)="openStatus(statusContent, notification.id)"
+                        *ngIf="notification.status == 3"
+                      >
+                        Not Available
+                      </span>
+                    </td>
+                    <td *ngIf="userRole === 'ADMIN'">
+                      <button
+                        type="button"
+                        class="button-color"
+                        (click)="clearList()"
+                      >
+                        <i
+                          class="fa fa-trash text-danger ml-2"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </td>
+                    <confirmation-modal
+                      #confirmationModal
+                      (newConfirmationEvent)="
+                        getConfirmationValue($event, notification.id)
+                      "
+                      [modalStyle]="modalStyle"
+                      [modalTitle]="modalTitle"
+                      [modalBody]="modalBody"
+                      [modalButtonColor]="modalButtonColor"
+                    >
+                    </confirmation-modal>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #messageContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Message</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="inputjudicialOfficer">Judicial Officer</label>
+          <select
+            id="inputjudicialOfficer"
+            class="form-control"
+            formControlName="judicialOfficer"
+          >
+            <option [ngValue]="null" selected disabled>
+              Choose Judicial Officer
+            </option>
+            <option
+              *ngFor="let userList of userListData"
+              [ngValue]="userList.email"
+            >
+              {{ userList.username }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group col-md-6"></div>
+      </div>
+      <div class="form-group">
+        <label for="inputMessage">Message</label>
+        <textarea
+          class="form-control"
+          id="inputMessage"
+          rows="3"
+          formControlName="message"
+        ></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-warning">
+        Add New Message
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #statusContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Status</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroupStatus" (validSubmit)="onSubmitStatus()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label><strong>Status</strong></label>
+        <select class="form-control" formControlName="status">
+          <option value="2">Available</option>
+          <option value="3">Not Available</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning">Update Status</button>
+    </div>
+  </form>
+</ng-template>

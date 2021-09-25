@@ -5,6 +5,7 @@ import { ArrestComponent } from './features/arrest/arrest.component';
 import { CaseComponent } from './features/case/case.component';
 import { CloseCaseComponent } from './features/close-case/close-case.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { NotificationsComponent } from './features/notifications/notifications.component';
 import { LayoutComponent } from './layout/layout.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { UserLoginComponent } from './user-login/user-login.component';
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'closedDetails',
         component: CloseCaseComponent,
+      },
+      {
+        path: 'notificationsDetails',
+        component: NotificationsComponent,
       }
     ],
   },

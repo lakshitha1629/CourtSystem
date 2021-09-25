@@ -30,6 +30,7 @@ import { UserService } from './core/service/user.service';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
 import { CloseCaseComponent } from './features/close-case/close-case.component';
+import { NotificationsComponent } from './features/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { CloseCaseComponent } from './features/close-case/close-case.component';
     UserRegistrationComponent,
     UserLoginComponent,
     PageNotFoundComponent,
-    CloseCaseComponent
+    CloseCaseComponent,
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,

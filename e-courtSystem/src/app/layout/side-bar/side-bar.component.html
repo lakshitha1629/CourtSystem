@@ -27,13 +27,21 @@
           <span class="nav-text">Closed Details</span>
         </a>
       </li>
-      <!-- <li class="nav-label">Components</li>
-      <li>
-        <a href="">
-          <i class="icon icon-world-2"></i>
-          <span class="nav-text">Bootstrap</span>
+      <li
+        routerLink="/main/notificationsDetails"
+        routerLinkActive="mm-active"
+        *ngIf="
+          userRole === 'ATTORNEY' ||
+          userRole === 'POLICE' ||
+          userRole === 'JUDICIAL' ||
+          userRole === 'ADMIN'
+        "
+      >
+        <a>
+          <i class="fa fa-comments"></i>
+          <span class="nav-text">Notifications</span>
         </a>
-      </li> -->
+      </li>
     </ul>
   </div>
 </div>

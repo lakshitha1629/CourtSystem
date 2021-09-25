@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -9,7 +10,15 @@ export class UserService {
 
   constructor(private readonly http: HttpClient) { }
 
-  login(formData) { return this.http.post(`${environment.apiUrl}api/AuthManagement/Login`, formData); }
+  getUserList(): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}api/AuthManagement`);
+  }
 
-  register(formData) { return this.http.post(`${environment.apiUrl}api/AuthManagement/Register`, formData); }
+  login(formData) {
+    return this.http.post(`${environment.apiUrl}api/AuthManagement/Login`, formData);
+  }
+
+  register(formData) {
+    return this.http.post(`${environment.apiUrl}api/AuthManagement/Register`, formData);
+  }
 }

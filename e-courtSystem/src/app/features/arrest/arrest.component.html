@@ -6,7 +6,7 @@
         type="button"
         class="btn btn-primary"
         (click)="openArrest(arrestContent, true)"
-        [disabled]="!(userRole === 'POLICE' || userRole === 'ADMIN')"
+        *ngIf="userRole === 'POLICE' || userRole === 'ADMIN'"
       >
         <i class="fa fa-plus" aria-hidden="true"></i>
         &nbsp; Add New Arrest Data
@@ -65,9 +65,17 @@
                     <td>
                       <span
                         class="badge badge-success"
-                        (click)="openStatus(statusContent, arrest.id)"
-                        >Active</span
+                        *ngIf="!(userRole == 'JUDICIAL' || userRole == 'ADMIN')"
                       >
+                        Active
+                      </span>
+                      <span
+                        class="badge badge-success"
+                        *ngIf="userRole === 'JUDICIAL' || userRole === 'ADMIN'"
+                        (click)="openStatus(statusContent, arrest.id)"
+                      >
+                        Active
+                      </span>
                       <!-- <span class="badge badge-danger">Closed</span> -->
                     </td>
                     <td>
