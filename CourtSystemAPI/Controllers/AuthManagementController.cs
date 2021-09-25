@@ -12,6 +12,8 @@ using Microsoft.IdentityModel.Tokens;
 using CourtSystemAPI.Configuration;
 using CourtSystemAPI.Models.DTOs.Requests;
 using CourtSystemAPI.Models.DTOs.Responses;
+using Microsoft.EntityFrameworkCore;
+using CourtSystemAPI.Models;
 
 namespace CourtSystemAPI.Controllers
 {
@@ -28,6 +30,30 @@ namespace CourtSystemAPI.Controllers
         {
             _userManager = userManager;
             _jwtConfig = optionsMonitor.CurrentValue;
+        }
+
+        // GET /GetAllUsers
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            UserModel userModel = new UserModel();
+            var userList = new List<UserModel>();
+            foreach (var user in users)
+            {
+                userModel = new UserModel();
+                var roles = await _userManager.GetRolesAsync(user);
+                userModel.Email = user.Email;
+                userModel.Username = user.UserName;
+                userModel.Role = "";
+                foreach (var role in roles)
+                {
+                    userModel.Role = role;
+                }
+                userList.Add(userModel);
+            }
+
+            return Ok(userList);
         }
 
         [HttpPost]
@@ -51,7 +77,8 @@ namespace CourtSystemAPI.Controllers
                     });
                 }
 
-                try{
+                try
+                {
                     var newUser = new IdentityUser() { Email = user.Email, UserName = user.Username };
                     var isCreated = await _userManager.CreateAsync(newUser, user.Password);
                     await _userManager.AddToRoleAsync(newUser, user.Role);
@@ -79,7 +106,7 @@ namespace CourtSystemAPI.Controllers
 
                     throw ex;
                 }
-                
+
             }
 
             return BadRequest(new RegistrationResponse()
