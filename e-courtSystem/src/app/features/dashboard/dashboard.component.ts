@@ -14,11 +14,8 @@ export class DashboardComponent implements OnInit {
   public radarChartOptions: RadialChartOptions = {
     responsive: true,
   };
-  public radarChartLabels: Label[] = ['Active', 'Canceled', 'Completed', 'Ongoing'];
-  public radarChartData: ChartDataSets[] = [
-    { data: [75, 48, 100, 75], label: 'Arrest' },
-    { data: [28, 48, 50, 20], label: 'Case' }
-  ];
+  public radarChartLabels: Label[] = ['Active', 'Canceled', 'Ongoing'];
+  public radarChartData: ChartDataSets[];
   public radarChartType: ChartType = 'radar';
   // ============= Chart End =============
 
@@ -26,11 +23,17 @@ export class DashboardComponent implements OnInit {
   arrestCount: number = 0;
   caseCount: number = 0;
   ongoingCaseCount: number = 0;
+  closedCaseCount: number = 0;
   completedCaseCount: number = 0;
 
   constructor(
     private spinner: NgxSpinnerService,
-    private arrestService: ArrestService) { }
+    private arrestService: ArrestService) {
+    this.radarChartData = [
+      { data: [], label: 'Arrest' },
+      { data: [], label: 'Case' }
+    ];
+  }
 
   ngOnInit(): void {
     this.getArrestByStatus();
@@ -47,9 +50,13 @@ export class DashboardComponent implements OnInit {
           this.arrestCount = arrestList.filter(x => x.status == 1).length;
           this.caseCount = arrestList.filter(x => x.status == 2).length;
           this.ongoingCaseCount = arrestList.filter(x => x.status == 2).length;
+          this.closedCaseCount = arrestList.filter(x => x.status == 3).length;
+          this.radarChartData[0].data = [this.arrestCount, this.closedCaseCount, this.ongoingCaseCount];
+          this.radarChartData[1].data = [this.caseCount, this.closedCaseCount, this.ongoingCaseCount];
           this.spinner.hide();
         }
       );
-
   }
+
+
 }
