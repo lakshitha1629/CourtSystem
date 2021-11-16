@@ -24,6 +24,7 @@ export class ArrestComponent extends BaseComponent implements OnInit {
   arrestData: any[];
   isNewItem: boolean;
   userRole;
+  userName;
   userGuid;
 
   formGroup: FormGroup = new FormGroup({
@@ -52,15 +53,18 @@ export class ArrestComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getArrestByStatus();
     this.getUserRole();
   }
 
   getUserRole() {
     const userData = this.userQuery.getAll();
-    this.userRole = userData[0].role
-    console.log(userData[0].role);
+    this.userRole = userData[0].role;
+    this.userName = userData[0].userName;
+    this.getArrestByStatus();
+  }
 
+  open(detailsContent) {
+    this.modalService.open(detailsContent, { size: 'lg' });
   }
 
   editArrest(arrestContent, arrest, isNew: boolean) {
@@ -81,21 +85,38 @@ export class ArrestComponent extends BaseComponent implements OnInit {
 
   getArrestByStatus() {
     this.spinner.show();
-    const getArrestsSubscription = this.arrestService.getArrestByStatus(1)
-      .subscribe(
-        (arrest) => {
-          console.log(arrest);
+    if (this.userRole == 'VIEWER') {
+      const getArrestsSubscription = this.arrestService.getArrestByStatus(1)
+        .subscribe(
+          (arrest) => {
+            this.arrestData = arrest.filter(x => x.nic == this.userName);
+            this.spinner.hide();
+          },
+          (error) => {
+            console.log(error);
+            this.spinner.hide();
+            this.toastr.error(error.error.detail);
+          }
+        );
+      this.subscriptions.push(getArrestsSubscription);
+    } else {
+      const getArrestsSubscription = this.arrestService.getArrestByStatus(1)
+        .subscribe(
+          (arrest) => {
+            console.log(arrest);
 
-          this.arrestData = arrest;
-          this.spinner.hide();
-        },
-        (error) => {
-          console.log(error);
-          this.spinner.hide();
-          this.toastr.error(error.error.detail);
-        }
-      );
-    this.subscriptions.push(getArrestsSubscription);
+            this.arrestData = arrest;
+            this.spinner.hide();
+          },
+          (error) => {
+            console.log(error);
+            this.spinner.hide();
+            this.toastr.error(error.error.detail);
+          }
+        );
+      this.subscriptions.push(getArrestsSubscription);
+    }
+
   }
 
   openArrest(arrestContent, isNew: boolean) {
@@ -226,6 +247,50 @@ export class ArrestComponent extends BaseComponent implements OnInit {
         this.toastr.error(error.error.detail);
       }
     });
+  }
+
+  printPage() {
+    const printContents = document.getElementById('print').innerHTML;
+    const popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto,toolbar=0,scrollbars=0,status=0');
+    popupWin.document.open();
+    popupWin.document.write(`
+        <html>
+            <head>
+                <title>Print Page</title>
+                <!-- CSS only -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+                <style>
+
+                @page {
+                  size: auto;
+                  margin: 0mm;
+                }
+
+                #print {
+                  margin: 0;
+                  padding: 0;
+                  left: 0;
+                  top: 0;
+                  right: 0;
+                  border: none;
+                  overflow: hidden;
+                }
+
+                </style>
+            </head>
+            <body
+                height: 100% !important;
+                margin: 0; padding: 0;
+                left: 0;
+                top: 0;
+                font-size: 14px !important;
+                font-family: 'Helvetica';
+                color: #000";
+                onload="document.execCommand('print');window.close();">${printContents}</body>
+        </html>`
+    );
+    popupWin.document.close();
+    this.modalService.dismissAll();
   }
 
 }

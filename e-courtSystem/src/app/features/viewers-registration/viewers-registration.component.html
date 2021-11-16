@@ -1,0 +1,115 @@
+<div class="content-body">
+  <!-- row -->
+  <div class="container-fluid">
+    <div class="d-flex flex-row-reverse mb-3">
+      <button
+        type="button"
+        class="btn btn-primary"
+        *ngIf="userRole === 'ADMIN'"
+        (click)="open(viewerContent)"
+      >
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        &nbsp; New Viewer Registration
+      </button>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="card-title">Viewers List</h4>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table mb-0">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>email</th>
+                    <th>username</th>
+                    <th>role</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let user of userList; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                      <span>{{ user.username }}</span>
+                    </td>
+                    <td>
+                      <span>{{ user.role }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #viewerContent let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">New Viewer Registration</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="d('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="formGroup" (validSubmit)="onSubmit()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label><strong>NIC</strong></label>
+        <ng-select
+          #ngSelect
+          [items]="userNICList"
+          [(ngModel)]="selectedNIC"
+          bindLabel="userFull"
+          bindValue="userFullAll"
+          placeholder="Enter NIC"
+          (change)="onChange($event)"
+          [searchFn]="customSearchFn"
+        >
+          <ng-template
+            ng-option-tmp
+            let-item="item"
+            let-index="index"
+            let-search="searchTerm"
+          >
+            <div [ngOptionHighlight]="search">
+              {{ item.userFull }} &#8594; {{ item.nic }}
+            </div>
+          </ng-template>
+        </ng-select>
+      </div>
+      <div class="form-group">
+        <label><strong>Email</strong></label>
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Enter Email"
+          formControlName="email"
+        />
+      </div>
+      <div class="form-group">
+        <label><strong>Password</strong></label>
+        <input
+          type="password"
+          class="form-control"
+          placeholder="Enter Password"
+          formControlName="password"
+        />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-warning">Add</button>
+    </div>
+  </form>
+</ng-template>

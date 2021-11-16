@@ -31,6 +31,9 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
 import { AuthService } from './core/auth/auth.service';
 import { CloseCaseComponent } from './features/close-case/close-case.component';
 import { NotificationsComponent } from './features/notifications/notifications.component';
+import { DetailsViewComponent } from './features/details-view/details-view.component';
+import { ViewersRegistrationComponent } from './features/viewers-registration/viewers-registration.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,9 @@ import { NotificationsComponent } from './features/notifications/notifications.c
     UserLoginComponent,
     PageNotFoundComponent,
     CloseCaseComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    DetailsViewComponent,
+    ViewersRegistrationComponent
   ],
   imports: [
     BrowserModule,
@@ -59,6 +64,7 @@ import { NotificationsComponent } from './features/notifications/notifications.c
     NgxSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
+    NgSelectModule,
     NgBootstrapFormValidationModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 4000,

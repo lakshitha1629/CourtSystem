@@ -5,6 +5,7 @@ import { ConfirmationModalComponent } from './confirmation-modal/confirmation-mo
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [ConfirmationModalComponent],
@@ -14,6 +15,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    NgSelectModule,
     RouterModule.forChild([]),
   ],
   exports: [ConfirmationModalComponent],

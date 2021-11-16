@@ -64,6 +64,52 @@
 @import url(./../vendor/aos/css/aos.min.css);
 @import url(./../vendor/perfect-scrollbar/css/perfect-scrollbar.css);
 @import url(./../vendor/metismenu/css/metisMenu.min.css);
+
+
+/* ==================================================== */
+/* 0. Print Styles                            */
+/* ==================================================== */
+
+@media print {
+  body * {
+    margin: 0;
+    color: #000;
+    background-color: #fff;
+    visibility: hidden;
+    font-family: "Helvetica";
+    font-size: 30pt !important;
+  }
+
+  .card-list {
+    height: fit-content !important;
+  }
+
+  img {
+    width: 50vw !important;
+  }
+
+  #printable,
+  #printable * {
+    visibility: visible;
+  }
+
+  #printable {
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+    right: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed;
+    border: none;
+  }
+}
+
+/* ==================================================== */
+/* 01. Global Content Styles                            */
+/* ==================================================== */
+
 .gradient_one {
   background-image: linear-gradient(
     to right,

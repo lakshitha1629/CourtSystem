@@ -42,6 +42,49 @@
                         <a href=""><img width="35" src="../../../assets/images/avatar/1.png" alt="" /></a>
                       </div>
                     </td> -->
+                    <ng-template #detailsContent let-c="close" let-d="dismiss">
+                      <div class="modal-header">
+                        <h4 class="modal-title" id="modal-basic-title">
+                          Details Page
+                        </h4>
+                        <button
+                          type="button"
+                          class="close"
+                          aria-label="Close"
+                          (click)="d('Cross click')"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <app-details-view
+                          [name]="arrest.firstName + ' ' + arrest.lastName"
+                          [nic]="arrest.nic"
+                          [place]="arrest.place"
+                          [reason]="arrest.reason"
+                          [remark]="arrest.remark"
+                          [officer]="arrest.officer"
+                          [date]="arrest.createdDate"
+                          id="print"
+                        ></app-details-view>
+                      </div>
+                      <div class="modal-footer" id="non-printable">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          (click)="d('Cross click')"
+                        >
+                          Close
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-warning"
+                          (click)="printPage()"
+                        >
+                          Print
+                        </button>
+                      </div>
+                    </ng-template>
                     <td>{{ i + 1 }}</td>
                     <td>{{ arrest.firstName }} {{ arrest.lastName }}</td>
                     <td>
@@ -98,6 +141,16 @@
                       >
                         <i
                           class="fa fa-trash text-danger ml-2"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="button-color"
+                        (click)="open(detailsContent)"
+                      >
+                        <i
+                          class="fa fa-eye text-info ml-2"
                           aria-hidden="true"
                         ></i>
                       </button>
