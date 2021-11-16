@@ -94,8 +94,7 @@ export class ViewersRegistrationComponent extends BaseComponent implements OnIni
 
   getUserRole() {
     const userData = this.userQuery.getAll();
-    this.userRole = userData[0].role
-    console.log(userData[0].role);
+    this.userRole = userData[0].role;
   }
 
   open(viewerContent) {
@@ -114,10 +113,10 @@ export class ViewersRegistrationComponent extends BaseComponent implements OnIni
     this.userService.register(userData).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
         this.toastr.success('New user created!', 'Viewer Registration successful.');
         this.formGroup.reset();
         this.modalService.dismissAll();
+        this.getCaseList();
       },
       error: error => {
         this.spinner.hide();

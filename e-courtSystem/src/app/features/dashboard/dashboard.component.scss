@@ -1,0 +1,31 @@
+img {
+  display: block;
+  max-width: 100%;
+  background-size: cover;
+}
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+/* Start Landing Section */
+.landing {
+  height: 100vh;
+}
+.landing .container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+}
+.landing .text {
+  text-align: start;
+  flex: 1;
+}
+
+p {
+  text-align: justify;
+}

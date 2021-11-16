@@ -1,4 +1,4 @@
-<div class="content-body">
+<div class="content-body" *ngIf="userRole != 'VIEWER'">
   <!-- row -->
   <div class="container-fluid">
     <div class="row">
@@ -147,6 +147,44 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="content-body" *ngIf="userRole == 'VIEWER'">
+  <!-- row -->
+  <div class="container">
+    <div class="text">
+      <h1>Welcome to E - Court System.</h1>
+      <p>
+        In any civilized society people are expected to solve issues that arise
+        among them through the court system. However, due to the very high
+        number of cases referred for adjudication the number of cases that can
+        be solved are very less, and as elsewhere mentioned in this report the
+        backlog amounts to about 800,000 cases in 2020. Furthermore, it takes
+        about ten years for a case to reach an end. Though there are different
+        strategies that utilized in Sri Lanka with the intention of speeding the
+        court process, none of them have proven successful. In such a backdrop
+        the utilization of technology has proven successful in many other
+        countries.
+      </p>
+      <p>
+        The Information Technology can be utilized to minimize delays and remedy
+        most of the short comings of a traditional legal system. A system that
+        interconnects from court staff to all other stakeholders will not only
+        speed up the process but also achieve many other positive changes to the
+        system.
+      </p>
+      <p>
+        In this section of the report the details about the problem domain will
+        be discussed with the technological implementations in other countries.
+      </p>
+    </div>
+    <div class="image">
+      <img
+        src="https://srilankamirror.com/media/k2/items/cache/4792f873a678aadec28e08a0ed3b397a_XL.jpg"
+        alt="Coding Illsturation"
+      />
     </div>
   </div>
 </div>

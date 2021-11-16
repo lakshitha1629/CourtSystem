@@ -69,8 +69,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
 
   editArrest(arrestContent, arrest, isNew: boolean) {
     this.isNewItem = isNew;
-    console.log(arrest);
-
     this.formGroup.controls.arrestId.setValue(arrest.id);
     this.formGroup.controls.firstName.setValue(arrest.firstName);
     this.formGroup.controls.lastName.setValue(arrest.lastName);
@@ -103,8 +101,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
       const getArrestsSubscription = this.arrestService.getArrestByStatus(1)
         .subscribe(
           (arrest) => {
-            console.log(arrest);
-
             this.arrestData = arrest;
             this.spinner.hide();
           },
@@ -163,7 +159,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
       this.arrestService.addArrest(arrestData).subscribe({
         next: data => {
           this.spinner.hide();
-          console.log(data);
           this.formGroup.reset();
           this.modalService.dismissAll();
           this.toastr.success('Successfully Added');
@@ -191,7 +186,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
       this.arrestService.updateArrest(arrestData).subscribe({
         next: data => {
           this.spinner.hide();
-          console.log(data);
           this.formGroup.reset();
           this.modalService.dismissAll();
           this.toastr.success('Successfully Updated');
@@ -217,7 +211,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
     this.arrestService.updateArrestStatus(statusData).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.formGroup.reset();
         this.modalService.dismissAll();
         this.toastr.success('Successfully Updated Status');
@@ -236,7 +229,6 @@ export class ArrestComponent extends BaseComponent implements OnInit {
     this.arrestService.deleteArrest(id).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.modalService.dismissAll();
         this.toastr.success('Successfully Deleted');
         this.getArrestByStatus();

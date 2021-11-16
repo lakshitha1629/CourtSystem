@@ -58,7 +58,6 @@ export class NotificationsComponent extends BaseComponent implements OnInit {
     const userData = this.userQuery.getAll();
     this.userRole = userData[0].role;
     this.userEmail = userData[0].email;
-    console.log(userData[0]);
   }
 
   getOfficerList() {
@@ -139,7 +138,6 @@ export class NotificationsComponent extends BaseComponent implements OnInit {
     this.notificationService.addNotification(messageData).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.formGroup.reset();
         this.modalService.dismissAll();
         this.toastr.success('Successfully Added');
@@ -163,7 +161,6 @@ export class NotificationsComponent extends BaseComponent implements OnInit {
     this.notificationService.updateNotificationStatus(statusData).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.formGroup.reset();
         this.modalService.dismissAll();
         this.toastr.success('Successfully Updated Status');
@@ -183,7 +180,6 @@ export class NotificationsComponent extends BaseComponent implements OnInit {
     this.notificationService.deleteNotification(id).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.modalService.dismissAll();
         this.toastr.success('Successfully Deleted');
         this.getAllNotification();

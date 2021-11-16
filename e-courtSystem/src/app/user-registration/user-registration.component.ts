@@ -37,7 +37,6 @@ export class UserRegistrationComponent implements OnInit {
     this.userService.register(userData).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
         this.toastr.success('New user created!', 'Registration successful.');
         localStorage.setItem('token', data.token);
         this.formGroup.reset();

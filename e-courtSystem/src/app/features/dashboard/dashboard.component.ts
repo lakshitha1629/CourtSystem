@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ChartDataSets, ChartType, RadialChartOptions } from 'chart.js';
 import { ArrestService } from 'src/app/core/service/arrest.service';
 import { Label } from 'ng2-charts';
+import { UserQuery } from 'src/app/core/state/user/user.query';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,7 @@ export class DashboardComponent implements OnInit {
   public radarChartData: ChartDataSets[];
   public radarChartType: ChartType = 'radar';
   // ============= Chart End =============
-
+  userRole;
   arrestData: any[];
   arrestCount: number = 0;
   caseCount: number = 0;
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private spinner: NgxSpinnerService,
+    private userQuery: UserQuery,
     private arrestService: ArrestService) {
     this.radarChartData = [
       { data: [], label: 'Arrest' },
@@ -36,7 +38,13 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUserRole();
     this.getArrestByStatus();
+  }
+
+  getUserRole() {
+    const userData = this.userQuery.getAll();
+    this.userRole = userData[0].role;
   }
 
   getArrestByStatus() {
@@ -44,8 +52,6 @@ export class DashboardComponent implements OnInit {
     this.arrestService.getArrest()
       .subscribe(
         (arrestList) => {
-          console.log(arrestList);
-
           this.arrestData = arrestList;
           this.arrestCount = arrestList.filter(x => x.status == 1).length;
           this.caseCount = arrestList.filter(x => x.status == 2).length;

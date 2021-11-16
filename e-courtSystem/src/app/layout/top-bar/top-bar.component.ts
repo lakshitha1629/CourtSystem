@@ -33,7 +33,6 @@ export class TopBarComponent implements OnInit {
           role: res.role[0],
           userName: res.userName
         } as User);
-        // console.log(res.role[0]);
       },
       err => {
         console.log(err);

@@ -21,7 +21,11 @@
           <span class="nav-text">Case Details</span>
         </a>
       </li>
-      <li routerLink="/main/closedDetails" routerLinkActive="mm-active">
+      <li
+        routerLink="/main/closedDetails"
+        routerLinkActive="mm-active"
+        *ngIf="userRole != 'VIEWER'"
+      >
         <a>
           <i class="fa fa-times" aria-hidden="true"></i>
           <span class="nav-text">Closed Details</span>

@@ -39,9 +39,7 @@ export class CloseCaseComponent extends BaseComponent implements OnInit {
 
   getUserRole() {
     const userData = this.userQuery.getAll();
-    this.userRole = userData[0].role
-    console.log(userData[0].role);
-
+    this.userRole = userData[0].role;
   }
 
   getArrestByStatus() {
@@ -77,7 +75,6 @@ export class CloseCaseComponent extends BaseComponent implements OnInit {
     this.arrestService.updateArrestStatus(statusData).subscribe({
       next: data => {
         this.spinner.hide();
-        console.log(data);
         this.formGroupStatus.reset();
         this.modalService.dismissAll();
         this.toastr.success('Successfully Updated Status');

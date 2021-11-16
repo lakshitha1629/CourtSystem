@@ -29,7 +29,6 @@ export class ConfirmationModalComponent {
     return new Promise<boolean>(resolve => {
       this.modalRef = this.modalService.open(this.modalContent, { size: 'sm' })
       this.modalRef.result.then((result) => {
-        console.log(result);
         this.newConfirmationEvent.emit(result);
       }, (reason) => {
         console.log(reason);

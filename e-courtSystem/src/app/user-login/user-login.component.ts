@@ -36,7 +36,6 @@ export class UserLoginComponent implements OnInit {
     this.userService.login(userData).subscribe({
       next: (data: any) => {
         this.spinner.hide();
-        console.log(data);
         localStorage.setItem('token', data.token);
         this.router.navigateByUrl('/main');
       },
