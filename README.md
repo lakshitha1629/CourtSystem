@@ -5,5 +5,5 @@ A civilized society encourages its citizens to solve any conflict arises among t
 
   
 ##  Tools & Technologies: 
-   - Frontend ➡ Angular, Akita, TypeScript
-   - Backend ➡ .NET, sqlite, swagger
+   - Frontend -> Angular, Akita, TypeScript
+   - Backend -> .NET, sqlite, swagger
